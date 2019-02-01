@@ -68,7 +68,7 @@ public class ButtonMaker : MonoBehaviour
                 tmp.text = b.itemname;
             }
 
-            but.onClick.AddListener(() => { AddObjectToScene.instance.AddObject(b.prefab); });
+            but.onClick.AddListener(() => { AddObjectToScene.instance.PlaceObject(b.prefab); });
         }
     }
 

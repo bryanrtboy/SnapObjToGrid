@@ -14,17 +14,11 @@ public class SnapToCollider : MonoBehaviour
 
     void Start()
     {
-        if (AddObjectToScene.instance == null)
-        {
-            Debug.LogError("No cursor tex available!");
-            Destroy(this);
-        }
         m_mr = this.GetComponent<MeshRenderer>();
         m_paintColor = m_mr.material.color;
     }
     void OnMouseEnter()
     {
-        AddObjectToScene.instance.m_isAttached = false;
         m_mr.material.color = Color.red;
         if (AddObjectToScene.instance.m_newObject != null)
         {
@@ -34,7 +28,6 @@ public class SnapToCollider : MonoBehaviour
 
     void OnMouseExit()
     {
-        //AddObjectToScene.instance.m_isAttached = true;
         m_mr.material.color = m_paintColor;
     }
 
@@ -44,17 +37,9 @@ public class SnapToCollider : MonoBehaviour
         if (AddObjectToScene.instance.m_newObject == null)
             return;
 
-        if (AddObjectToScene.instance.m_placeSound != null)
-            AddObjectToScene.instance.m_placeSound.Play();
+        AddObjectToScene.instance.InstantiateNewObject();
 
-        //Otherwise, as long as we have a confirm GUI, let's make it active
-        if (AddObjectToScene.instance.m_confirmCanvas != null)
-        {
-            AddObjectToScene.instance.m_confirmCanvas.transform.position = transform.position;
-            AddObjectToScene.instance.m_confirmCanvas.SetActive(true);
-        }
-
-        AddObjectToScene.instance.m_newObject = null;
+        //De-activate this slot since it already has something on it.
         this.GetComponent<Collider>().enabled = false;
     }
 }
