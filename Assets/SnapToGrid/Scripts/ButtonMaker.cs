@@ -9,7 +9,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class ButtonMaker : MonoBehaviour
 {
@@ -40,7 +39,8 @@ public class ButtonMaker : MonoBehaviour
                 i.thumbnail = t;
             i.cellHeight = 1;
             i.cellWidth = 1;
-            i.itemname = g.name;
+            string str = g.name.Replace("(Clone)", "");
+            i.itemname = str;
             i.price = 15.99f;
             i.priceString = i.price.ToString("#.##");
             i.value = 15;
@@ -61,15 +61,11 @@ public class ButtonMaker : MonoBehaviour
             RawImage ri = go.GetComponentInChildren<RawImage>();
             if (ri != null)
                 ri.texture = b.thumbnail;
-            TextMeshProUGUI[] tm = go.GetComponentsInChildren<TextMeshProUGUI>();
+            Text[] tm = go.GetComponentsInChildren<Text>();
 
-            foreach (TextMeshProUGUI tmp in tm)
+            foreach (Text tmp in tm)
             {
-                if (tmp.tag == "price")
-                    tmp.text = b.priceString;
-                if (tmp.tag == "itemname")
-                    tmp.text = b.name;
-
+                tmp.text = b.itemname;
             }
 
             but.onClick.AddListener(() => { AddObjectToScene.instance.AddObject(b.prefab); });
