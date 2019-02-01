@@ -14,12 +14,12 @@ public class ButtonMaker : MonoBehaviour
 {
     public GameObject m_buttonPrefab;
     public Transform m_contentContainer;
-    public List<ItemButton> buttons;
+    public List<Item> buttons;
     public string m_path = "FloorObjects";
 
     private void Start()
     {
-        buttons = new List<ItemButton>();
+        buttons = new List<Item>();
         GetButtonAtPath(m_path, 1, 1, false);
 
         MakeButtons();
@@ -33,7 +33,9 @@ public class ButtonMaker : MonoBehaviour
             GameObject go = Instantiate(g, Vector3.zero, Quaternion.identity);
 
 
-            ItemButton i = go.AddComponent(typeof(ItemButton)) as ItemButton;
+            Item i = go.GetComponent<Item>();
+            if (i == null)
+                i = go.AddComponent(typeof(Item)) as Item;
             Texture t = RuntimePreviewGenerator.GenerateModelPreview(go.transform, 60, 60);
             if (t != null)
                 i.thumbnail = t;
@@ -54,7 +56,7 @@ public class ButtonMaker : MonoBehaviour
 
     void MakeButtons()
     {
-        foreach (ItemButton b in buttons)
+        foreach (Item b in buttons)
         {
             GameObject go = Instantiate(m_buttonPrefab, Vector3.zero, Quaternion.identity, m_contentContainer);
             Button but = go.GetComponent<Button>() as Button;

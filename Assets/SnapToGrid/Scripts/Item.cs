@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemButton : MonoBehaviour
+public class Item : MonoBehaviour
 {
     public int cellWidth = 1;
     public int cellHeight = 1;
