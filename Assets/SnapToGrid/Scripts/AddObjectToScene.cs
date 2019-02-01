@@ -6,12 +6,15 @@ public class AddObjectToScene : MonoBehaviour
 {
     public static AddObjectToScene instance;
     public Camera m_mainCamera;
-    public GameObject m_confirmButton;
+    public GameObject m_confirmCanvas;
+    public AudioSource m_selectSound;
+    public AudioSource m_placeSound;
 
     [HideInInspector]
     public bool m_isAttached = false;
     [HideInInspector]
     public GameObject m_newObject;
+    GameObject m_lastObject;
 
     void Awake()
     {
@@ -23,8 +26,9 @@ public class AddObjectToScene : MonoBehaviour
             //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
             Destroy(gameObject);
 
-        if (m_confirmButton != null)
-            m_confirmButton.SetActive(false);
+        if (m_confirmCanvas != null)
+            m_confirmCanvas.SetActive(false);
+
     }
     void Update()
     {
@@ -62,12 +66,32 @@ public class AddObjectToScene : MonoBehaviour
         if (m_isAttached)
             return;
 
+        if (m_selectSound != null)
+            m_selectSound.Play();
+
         if (m_mainCamera)
         {
             Vector3 pos = m_mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, m_mainCamera.transform.position.z));
-            m_newObject = Instantiate(g, pos, Quaternion.identity);
+            //m_newObject = Instantiate(g, pos, Quaternion.identity);
+            m_newObject = g;
+            g.transform.position = pos;
+            g.SetActive(true);
+            g.transform.Rotate(new Vector3(0, 0, 0));
+            //Turn off the colliders so that we can raycast to where we want to place them
+            UpdateColliders(g, false);
             m_isAttached = true;
+            m_lastObject = m_newObject;
         }
+    }
+
+    public void CancelObject()
+    {
+        m_lastObject.SetActive(false);
+    }
+
+    public void RotateObject()
+    {
+        m_lastObject.transform.RotateAround(m_lastObject.transform.position, Vector3.up, 45f);
     }
 
     void ChangeLayer(GameObject g, int layerID)

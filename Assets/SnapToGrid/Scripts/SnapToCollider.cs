@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SnapToCollider : MonoBehaviour
 {
-    public float m_yOffset = .5f;
+    [Tooltip("When placing, how much should the pivot be offset from the center of this object?")]
+    public Vector3 m_offset = Vector3.zero;
     Color m_paintColor = Color.white;
     Texture m_texture;
 
@@ -27,7 +28,7 @@ public class SnapToCollider : MonoBehaviour
         m_mr.material.color = Color.red;
         if (AddObjectToScene.instance.m_newObject != null)
         {
-            AddObjectToScene.instance.m_newObject.transform.position = new Vector3(transform.position.x, transform.position.y + m_yOffset, transform.position.z);
+            AddObjectToScene.instance.m_newObject.transform.position = transform.position + m_offset;
         }
     }
 
@@ -43,13 +44,14 @@ public class SnapToCollider : MonoBehaviour
         if (AddObjectToScene.instance.m_newObject == null)
             return;
 
+        if (AddObjectToScene.instance.m_placeSound != null)
+            AddObjectToScene.instance.m_placeSound.Play();
 
         //Otherwise, as long as we have a confirm GUI, let's make it active
-        if (AddObjectToScene.instance.m_confirmButton != null)
+        if (AddObjectToScene.instance.m_confirmCanvas != null)
         {
-            Vector3 pos = new Vector3(transform.position.x + 1, transform.position.y + m_yOffset, transform.position.z);
-            AddObjectToScene.instance.m_confirmButton.transform.position = pos;
-            AddObjectToScene.instance.m_confirmButton.SetActive(true);
+            AddObjectToScene.instance.m_confirmCanvas.transform.position = transform.position;
+            AddObjectToScene.instance.m_confirmCanvas.SetActive(true);
         }
 
         AddObjectToScene.instance.m_newObject = null;
