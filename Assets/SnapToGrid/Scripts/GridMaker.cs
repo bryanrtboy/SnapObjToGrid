@@ -30,7 +30,13 @@ public class GridMaker : MonoBehaviour
             Debug.LogError("No prefab to make the grid OR no ground to put it on!");
             return;
         }
+
+        //Renderer cannot be rotated or the bounding size is off
+        Transform boundingParent = m_bounds.transform.parent;
         Quaternion boundsRotation = m_bounds.transform.rotation;
+
+        //Make the bounding box a root object and then rotate to zero
+        m_bounds.transform.parent = null;
         m_bounds.transform.localEulerAngles = Vector3.zero;
         //Get the size of the bounding box
         Vector3 max = m_bounds.bounds.size;
@@ -86,7 +92,13 @@ public class GridMaker : MonoBehaviour
 
 
         if (m_destroyBounds)
+        {
             Destroy(m_bounds.gameObject);
+        }
+        else
+        {
+            m_bounds.transform.parent = boundingParent;
+        }
         Destroy(tempObj);
 
     }
