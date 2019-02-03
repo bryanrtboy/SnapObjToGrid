@@ -5,13 +5,19 @@ using UnityEngine.UI;
 
 public class Item : MonoBehaviour
 {
-    public int cellWidth = 1;
-    public int cellHeight = 1;
-    public float price;
-    public string priceString;
     public string itemname;
-    public int value;
     public Texture thumbnail;
-    public bool isTabletop = false;
     public GameObject prefab;
+    public Collider attachedGridCollider;
+    public Vector3 m_rotationAxis = Vector3.up;
+
+    void OnMouseDown()
+    {
+        //Don't select objects while we are placing an object
+        if (AddObjectToScene.instance.m_newObject != null)
+            return;
+
+        AddObjectToScene.instance.SetSelectedObject(this.gameObject);
+
+    }
 }

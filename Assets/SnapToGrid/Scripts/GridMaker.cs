@@ -31,20 +31,36 @@ public class GridMaker : MonoBehaviour
         }
         //Get the size of the bounding box
         Vector3 max = m_bounds.bounds.size;
-        Vector3 pos = Vector3.zero;
+        Vector3 pos = new Vector3(-max.x * .5f, -max.y * .5f, -max.z * .5f);
 
         //Figure out the spacing based on the bounding area
         float x_increment = max.x / m_matrix.x;
         float y_increment = max.y / m_matrix.y;
         float z_increment = max.z / m_matrix.z;
 
+        GameObject gridContainer = new GameObject(this.name + "_container");
         //create a temporary object based on the prefab, we'll destroy this later
-        GameObject tempObj = Instantiate(m_prefab, pos, Quaternion.identity, this.transform);
+        GameObject tempObj = Instantiate(m_prefab, pos, Quaternion.identity);
 
         if (m_scalePrefabToFitBounds)
         {
             tempObj.transform.localScale = new Vector3(m_prefab.transform.localScale.x * x_increment, m_prefab.transform.localScale.y * y_increment, m_prefab.transform.localScale.z * z_increment);
         }
+
+        //offset based on the pefab's size
+        Renderer r = tempObj.GetComponent<Renderer>() as Renderer;
+        Vector3 offset = Vector3.zero;
+        if (r != null)
+        {
+            offset = r.bounds.size - (tempObj.transform.localScale * 0.5f);
+
+            if (m_scalePrefabToFitBounds)
+                pos = pos + offset;
+            else
+                pos = pos + r.bounds.size;
+
+        }
+
 
         //Make the grid
         for (int z = 0; z < m_matrix.z; z++)
@@ -53,22 +69,18 @@ public class GridMaker : MonoBehaviour
             {
                 for (int y = 0; y < m_matrix.y; y++)
                 {
-                    pos = new Vector3(x_increment * x, y_increment * y, z_increment * z);
-                    Instantiate(tempObj, pos, Quaternion.identity, this.transform);
+                    Vector3 p = new Vector3(x_increment * x, y_increment * y, z_increment * z) + pos;
+                    Instantiate(tempObj, p, Quaternion.identity, gridContainer.transform);
                 }
             }
         }
 
-        Renderer r = tempObj.GetComponent<Renderer>() as Renderer;
-        Vector3 offset = Vector3.zero;
 
-        //offset the grid's parent object based on the pefab's size
-        if (r != null)
-        {
-            offset += r.bounds.size - (tempObj.transform.localScale * .5f);
-        }
-        //move this object to where the bounds object is located
-        this.transform.position = m_bounds.bounds.min + offset;
+
+        //move the grid container to where the bounds object is located
+        gridContainer.transform.position = this.transform.position;
+
+
         if (m_destroyBounds)
             Destroy(m_bounds.gameObject);
         Destroy(tempObj);

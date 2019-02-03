@@ -39,14 +39,8 @@ public class ButtonMaker : MonoBehaviour
             Texture t = RuntimePreviewGenerator.GenerateModelPreview(go.transform, 60, 60);
             if (t != null)
                 i.thumbnail = t;
-            i.cellHeight = 1;
-            i.cellWidth = 1;
             string str = g.name.Replace("(Clone)", "");
             i.itemname = str;
-            i.price = 15.99f;
-            i.priceString = i.price.ToString("#.##");
-            i.value = 15;
-            i.isTabletop = isTopper;
             i.prefab = go;
             go.SetActive(false);
             buttons.Add(i);
