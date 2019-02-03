@@ -267,18 +267,6 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2339447357080056777}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: AddObject
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 5451006469986426842, guid: 5fe8b7048517b4e29922a5502aac680b,
-            type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null

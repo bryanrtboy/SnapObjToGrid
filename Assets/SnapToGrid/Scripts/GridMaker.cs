@@ -1,9 +1,9 @@
 ﻿//Bryan Leister, Jan. 2019
 //
 //Generate a grid of objects based on an object in the scene
-//Requires that a 3D object 'm_bounds' (something like a Quad) exist in the scene and is placed
-//where you want the grid of objects to appear. 
+//to fit the bounding area of a 3D cube gameobject
 //
+//Instructions: 
 //The bounding object works best as a 3D cube
 //
 
@@ -30,6 +30,8 @@ public class GridMaker : MonoBehaviour
             Debug.LogError("No prefab to make the grid OR no ground to put it on!");
             return;
         }
+        Quaternion boundsRotation = m_bounds.transform.rotation;
+        m_bounds.transform.localEulerAngles = Vector3.zero;
         //Get the size of the bounding box
         Vector3 max = m_bounds.bounds.size;
         Vector3 pos = new Vector3(-max.x * .5f, -max.y * .5f, -max.z * .5f);
@@ -41,7 +43,7 @@ public class GridMaker : MonoBehaviour
 
         GameObject gridContainer = new GameObject(this.name + "_container");
         //create a temporary object based on the prefab, we'll destroy this later
-        GameObject tempObj = Instantiate(m_prefab, pos, Quaternion.identity);
+        GameObject tempObj = Instantiate(m_prefab);
 
         if (m_scalePrefabToFitBounds)
         {
@@ -75,11 +77,12 @@ public class GridMaker : MonoBehaviour
                 }
             }
         }
-
-
+        //reset the bounding box rotation to where it was at the start.
+        m_bounds.transform.rotation = boundsRotation;
 
         //move the grid container to where the bounds object is located
-        gridContainer.transform.position = this.transform.position;
+        gridContainer.transform.position = m_bounds.transform.position;
+        gridContainer.transform.rotation = m_bounds.transform.rotation;
 
 
         if (m_destroyBounds)

@@ -89,7 +89,7 @@ public class AddObjectToScene : MonoBehaviour
 
     public void ConfirmObjectPlacement()
     {
-        GameObject g = Instantiate(m_newObject, m_newObject.transform.position, Quaternion.identity);
+        Transform g = Instantiate(m_newObject.transform);
         Item i = g.GetComponent<Item>();
         if (i != null)
         {
@@ -97,7 +97,7 @@ public class AddObjectToScene : MonoBehaviour
             i.m_rotationAxis = m_rotationAxis;
         }
 
-        UpdateColliders(g, true);
+        UpdateColliders(g.gameObject, true);
         CleanUp();
     }
 

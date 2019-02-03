@@ -52,7 +52,7 @@ public class ButtonMaker : MonoBehaviour
     {
         foreach (Item b in buttons)
         {
-            GameObject go = Instantiate(m_buttonPrefab, Vector3.zero, Quaternion.identity, m_contentContainer);
+            Transform go = Instantiate(m_buttonPrefab.transform, m_contentContainer);
             Button but = go.GetComponent<Button>() as Button;
             RawImage ri = go.GetComponentInChildren<RawImage>();
             if (ri != null)

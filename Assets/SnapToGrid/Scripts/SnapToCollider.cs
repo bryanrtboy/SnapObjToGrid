@@ -55,6 +55,7 @@ public class SnapToCollider : MonoBehaviour
         {
             AddObjectToScene.instance.m_isAttachedToMouse = false;
             AddObjectToScene.instance.m_newObject.transform.position = transform.position + m_orientationOffset;
+            AddObjectToScene.instance.m_newObject.transform.rotation = this.transform.rotation;
             m_mr.material.color = Color.red;
         }
     }
