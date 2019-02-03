@@ -721,6 +721,7 @@ MonoBehaviour:
     type: 3}
   m_bounds: {fileID: 869872961}
   m_scalePrefabToFitBounds: 1
+  m_spacing: 0.1
   m_destroyBounds: 1
 --- !u!23 &869872961
 MeshRenderer:
@@ -1018,6 +1019,7 @@ MonoBehaviour:
     type: 3}
   m_bounds: {fileID: 1073601022}
   m_scalePrefabToFitBounds: 1
+  m_spacing: 0.1
   m_destroyBounds: 1
 --- !u!23 &1073601022
 MeshRenderer:

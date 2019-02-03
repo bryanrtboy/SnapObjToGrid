@@ -14,10 +14,11 @@ using UnityEngine;
 public class GridMaker : MonoBehaviour
 {
     [Tooltip("How many objects in X,Y,Z. Example: a 2D horizontal grid that is 5X5 would use 5,1,5 with a Quad rotated 90 on the X axis. A vertical grid would be 5,5,1 and have a Quad with no rotation.")]
-    public Vector3Int m_matrix;
+    public Vector3Int m_matrix = new Vector3Int(5, 1, 5);
     public GameObject m_prefab;
     public Renderer m_bounds;
     public bool m_scalePrefabToFitBounds = false;
+    public float m_spacing = 0f;
     public bool m_destroyBounds = true;
 
     // Start is called before the first frame update
@@ -44,7 +45,7 @@ public class GridMaker : MonoBehaviour
 
         if (m_scalePrefabToFitBounds)
         {
-            tempObj.transform.localScale = new Vector3(m_prefab.transform.localScale.x * x_increment, m_prefab.transform.localScale.y * y_increment, m_prefab.transform.localScale.z * z_increment);
+            tempObj.transform.localScale = new Vector3(m_prefab.transform.localScale.x * x_increment - m_spacing, m_prefab.transform.localScale.y * y_increment - m_spacing, m_prefab.transform.localScale.z * z_increment - m_spacing);
         }
 
         //offset based on the pefab's size
