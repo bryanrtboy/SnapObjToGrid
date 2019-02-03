@@ -53,7 +53,20 @@ public class GridMaker : MonoBehaviour
 
         if (m_scalePrefabToFitBounds)
         {
-            tempObj.transform.localScale = new Vector3(m_prefab.transform.localScale.x * x_increment - m_spacing, m_prefab.transform.localScale.y * y_increment - m_spacing, m_prefab.transform.localScale.z * z_increment - m_spacing);
+            float x = m_prefab.transform.localScale.x * x_increment;
+            if (x > m_spacing)
+                x = x - m_spacing;
+
+            float y = m_prefab.transform.localScale.y * y_increment;
+            if (y > m_spacing)
+                y = y - m_spacing;
+
+
+            float z = m_prefab.transform.localScale.z * z_increment;
+            if (z > m_spacing)
+                z = z - m_spacing;
+
+            tempObj.transform.localScale = new Vector3(x, y, z);
         }
 
         //offset based on the pefab's size

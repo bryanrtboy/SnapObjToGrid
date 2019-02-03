@@ -12,6 +12,7 @@ public class SnapToCollider : MonoBehaviour
     Color m_paintColor = Color.white;
     Texture m_texture;
     Vector3 m_orientationOffset = Vector3.zero;
+    Vector3 m_rotationAxis = Vector3.up;
 
     bool m_isAttached = false;
     MeshRenderer m_mr;
@@ -29,21 +30,27 @@ public class SnapToCollider : MonoBehaviour
         {
             case Orientation.Xnegative:
                 m_orientationOffset = new Vector3(-o.x, 0f, 0f);
+                m_rotationAxis = Vector3.right;
                 break;
             case Orientation.Xpositive:
                 m_orientationOffset = new Vector3(o.x, 0f, 0f);
+                m_rotationAxis = Vector3.right;
                 break;
             case Orientation.Ynegative:
                 m_orientationOffset = new Vector3(0f, -o.y, 0f);
+                m_rotationAxis = Vector3.up;
                 break;
             case Orientation.Ypositive:
                 m_orientationOffset = new Vector3(0f, o.y, 0f);
+                m_rotationAxis = Vector3.up;
                 break;
             case Orientation.Znegative:
                 m_orientationOffset = new Vector3(0f, 0f, -o.z);
+                m_rotationAxis = Vector3.forward;
                 break;
             case Orientation.Zpositive:
                 m_orientationOffset = new Vector3(0f, 0f, o.z);
+                m_rotationAxis = Vector3.forward;
                 break;
         }
 
@@ -71,7 +78,7 @@ public class SnapToCollider : MonoBehaviour
         if (AddObjectToScene.instance.m_waitingToConfirm || AddObjectToScene.instance.m_newObject == null)
             return;
 
-        AddObjectToScene.instance.SetObjectAndActivateUI(m_collider, m_orientationOffset);
+        AddObjectToScene.instance.SetObjectAndActivateUI(m_collider, m_rotationAxis);
         m_mr.material.color = m_paintColor;
         m_collider.enabled = false;
     }
