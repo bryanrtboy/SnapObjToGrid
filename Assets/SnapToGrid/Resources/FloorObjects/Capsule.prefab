@@ -105,12 +105,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b70a01c7ae5e64e689fa31a8ef2a107f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellWidth: 1
-  cellHeight: 1
-  price: 0
-  priceString: 
   itemname: 
-  value: 0
   thumbnail: {fileID: 0}
-  isTabletop: 0
   prefab: {fileID: 0}
+  attachedGridCollider: {fileID: 0}
+  m_rotationAxis: {x: 0, y: 1, z: 0}

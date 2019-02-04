@@ -36,8 +36,11 @@ public class ButtonMaker : MonoBehaviour
             Item i = go.GetComponent<Item>();
             if (i == null)
                 i = go.AddComponent(typeof(Item)) as Item;
+
             Texture t = RuntimePreviewGenerator.GenerateModelPreview(go.transform, 60, 60);
-            if (t != null)
+
+            //Set the image to use for a thumbnail on the button if it does not already exist
+            if (i.thumbnail == null && t != null)
                 i.thumbnail = t;
             string str = g.name.Replace("(Clone)", "");
             i.itemname = str;
@@ -55,8 +58,10 @@ public class ButtonMaker : MonoBehaviour
             Transform go = Instantiate(m_buttonPrefab.transform, m_contentContainer);
             Button but = go.GetComponent<Button>() as Button;
             RawImage ri = go.GetComponentInChildren<RawImage>();
+
             if (ri != null)
                 ri.texture = b.thumbnail;
+
             Text[] tm = go.GetComponentsInChildren<Text>();
 
             foreach (Text tmp in tm)
