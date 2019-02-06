@@ -525,7 +525,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 6.09
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -549,7 +549,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
   m_LocalRotation: {x: 0.26239592, y: 0.36692443, z: -0.108687945, w: 0.885834}
-  m_LocalPosition: {x: -5.47, y: 4.88, z: -3.65}
+  m_LocalPosition: {x: -7.4, y: 7.31, z: -3.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1574,19 +1574,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 610663239}
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1800371175}
-        m_MethodName: CleanUp
+        m_MethodName: ConfirmNewPlacement
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1872,17 +1861,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1383417946}
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1800371175}
         m_MethodName: Cancel
         m_Mode: 1
@@ -2220,14 +2198,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_mainCamera: {fileID: 534669904}
-  m_confirmCancelCanvas: {fileID: 738184356}
-  m_rotateTrashCanvas: {fileID: 901170124}
+  m_confirmCancelCanvas: {fileID: 738184353}
+  m_rotateTrashCanvas: {fileID: 901170121}
   m_selectSound: {fileID: 1636314227}
   m_placeSound: {fileID: 1383417946}
   m_isAttachedToMouse: 0
   m_waitingToConfirm: 0
-  m_newObject: {fileID: 0}
-  m_selectedObject: {fileID: 0}
+  m_livePrefab: {fileID: 0}
+  m_selectedItem: {fileID: 0}
 --- !u!4 &1800371176
 Transform:
   m_ObjectHideFlags: 0
@@ -2417,17 +2395,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1383417946}
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1800371175}
         m_MethodName: ConfirmObjectPlacement
         m_Mode: 1

@@ -8,8 +8,8 @@ public class AddObjectToScene : MonoBehaviour
     public static AddObjectToScene instance;
     public Camera m_mainCamera;
 
-    public Canvas m_confirmCancelCanvas;
-    public Canvas m_rotateTrashCanvas;
+    public GameObject m_confirmCancelCanvas;
+    public GameObject m_rotateTrashCanvas;
 
     public AudioSource m_selectSound;
     public AudioSource m_placeSound;
@@ -18,9 +18,9 @@ public class AddObjectToScene : MonoBehaviour
     [HideInInspector]
     public bool m_waitingToConfirm = false;
     [HideInInspector]
-    public GameObject m_newObject;
+    public GameObject m_livePrefab;
     [HideInInspector]
-    public GameObject m_selectedObject;
+    public Item m_selectedItem;
     Collider m_selectedGridCollider;
     Vector3 m_rotationAxis = Vector3.up;
 
@@ -44,14 +44,26 @@ public class AddObjectToScene : MonoBehaviour
         if (m_isAttachedToMouse)
         {
             Vector3 pos = m_mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -m_mainCamera.transform.position.z));
-            m_newObject.transform.position = pos;
+            m_livePrefab.transform.position = pos;
         }
     }
 
     public void PlaceObject(GameObject g)
     {
-        if (m_isAttachedToMouse || m_newObject != null)
+        // //Don't do anything if something is still attached to the mouse
+        // if (m_isAttachedToMouse)
+        //     return;
+
+        if (m_livePrefab != null)
+        {
+            ConfirmObjectPlacement();
             return;
+        }
+
+        if (m_selectedItem != null)
+        {
+            m_selectedItem.ActivateAttachedColliders(false);
+        }
 
         //Turn off any UI elements if they are open...
         CleanUp();
@@ -62,11 +74,11 @@ public class AddObjectToScene : MonoBehaviour
         if (m_mainCamera != null)
         {
             Vector3 pos = m_mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, m_mainCamera.transform.position.z));
-            m_newObject = g;
+            m_livePrefab = g;
             g.transform.position = pos;
             g.SetActive(true);
-            //Turn off the colliders so that we can raycast to where we want to place them
-            UpdateColliders(g, false);
+            //put this object on the ignore Raycast layer
+            g.layer = 2;
             m_isAttachedToMouse = true;
         }
     }
@@ -79,7 +91,7 @@ public class AddObjectToScene : MonoBehaviour
         if (m_placeSound != null)
             m_placeSound.Play();
 
-        m_confirmCancelCanvas.transform.position = m_newObject.transform.position;
+        m_confirmCancelCanvas.transform.position = m_livePrefab.transform.position;
         m_confirmCancelCanvas.gameObject.SetActive(true);
 
         m_isAttachedToMouse = false;
@@ -89,58 +101,60 @@ public class AddObjectToScene : MonoBehaviour
 
     public void ConfirmObjectPlacement()
     {
-        Transform g = Instantiate(m_newObject.transform);
-        Item i = g.GetComponent<Item>();
-        if (i != null)
-        {
-            i.attachedGridCollider = m_selectedGridCollider;
-            i.m_rotationAxis = m_rotationAxis;
-        }
+        if (m_placeSound != null)
+            m_placeSound.Play();
 
-        UpdateColliders(g.gameObject, true);
+        Transform g = Instantiate(m_livePrefab.transform);
+        //put this on the Default layer
+        g.gameObject.layer = 0;
+        m_selectedItem = g.GetComponent<Item>();
+        m_selectedItem.m_rotationAxis = m_rotationAxis;
+        m_selectedItem.AddThisCollider(m_selectedGridCollider);
+        m_selectedItem.ActivateAttachedColliders(false);
+
+        if (m_livePrefab != null)
+            m_livePrefab.SetActive(false);
+        m_livePrefab = null;
+        CleanUp();
+        SetSelectedObject(g.gameObject);
+    }
+
+    public void ConfirmNewPlacement()
+    {
+        //put this on the Default layer
+        m_selectedItem.gameObject.layer = 0;
+        m_selectedItem.ActivateAttachedColliders(false);
+
         CleanUp();
     }
 
+
     public void SetSelectedObject(GameObject g)
     {
-        m_selectedObject = g;
+
+        m_selectedItem = g.GetComponent<Item>() as Item;
         m_rotateTrashCanvas.transform.position = g.transform.position;
         m_rotateTrashCanvas.gameObject.SetActive(true);
     }
 
     public void RotateObject()
     {
-        if (m_selectedObject != null)
+        if (m_selectedItem != null)
         {
-            Item i = m_selectedObject.GetComponent<Item>();
-            if (i != null)
-            {
-                m_rotationAxis = i.m_rotationAxis;
-            }
-            m_selectedObject.transform.RotateAround(m_selectedObject.transform.position, m_rotationAxis, 45f);
+            m_rotationAxis = m_selectedItem.m_rotationAxis;
+            m_selectedItem.transform.Rotate(m_rotationAxis, 45f);
+            m_selectedItem.ActivateAttachedColliders(true);
         }
     }
 
     public void DestroyActiveObject()
     {
-        if (m_selectedObject != null)
+        if (m_selectedItem != null)
         {
-            Item i = m_selectedObject.GetComponent<Item>();
-            if (i != null && i.attachedGridCollider != null)
-                i.attachedGridCollider.enabled = true;
-
-            Destroy(m_selectedObject);
+            m_selectedItem.ActivateAttachedColliders(true);
+            Destroy(m_selectedItem.gameObject);
         }
         CleanUp();
-    }
-
-    void UpdateColliders(GameObject g, bool isColliderActive)
-    {
-        Collider[] colliders = g.GetComponentsInChildren<Collider>();
-        foreach (Collider mc in colliders)
-        {
-            mc.enabled = isColliderActive;
-        }
     }
 
     public void Cancel()
@@ -148,16 +162,16 @@ public class AddObjectToScene : MonoBehaviour
         if (m_selectedGridCollider != null)
             m_selectedGridCollider.enabled = true;
 
+        if (m_livePrefab != null)
+            m_livePrefab.SetActive(false);
         CleanUp();
     }
 
     public void CleanUp()
     {
-        if (m_newObject != null)
-            m_newObject.SetActive(false);
 
-        m_newObject = null;
-        m_selectedObject = null;
+        m_livePrefab = null;
+        m_selectedItem = null;
         m_waitingToConfirm = false;
         m_selectedGridCollider = null;
 

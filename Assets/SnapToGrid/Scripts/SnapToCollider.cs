@@ -8,23 +8,26 @@ public class SnapToCollider : MonoBehaviour
     public enum Orientation { Xnegative, Xpositive, Ynegative, Ypositive, Znegative, Zpositive };
     [Tooltip("The surface plane that we will snap the object to")]
     public Orientation m_orientation = Orientation.Ypositive;
+    public Color m_isTriggeredColor = Color.yellow;
 
-    Color m_paintColor = Color.white;
+    Color m_originalSurfaceColor = Color.white;
     Texture m_texture;
     Vector3 m_orientationOffset = Vector3.zero;
     Vector3 m_rotationAxis = Vector3.up;
+    bool m_isTriggered = false;
 
-    bool m_isAttached = false;
     MeshRenderer m_mr;
     Collider m_collider;
 
-    void Start()
+    void Awake()
     {
         m_mr = this.GetComponent<MeshRenderer>();
         m_collider = this.GetComponent<Collider>();
-        m_paintColor = m_mr.material.color;
+        m_originalSurfaceColor = m_mr.material.color;
 
-        //set up the surface position where the object pivot point will snap to.
+        //m_orientationOffset = When placing an object, which face of the grid cube do we want the object
+        //pivot point to snap to?
+        //m_rotationAxis = When rotating the object, what axis does it rotate around?
         Vector3 o = m_mr.bounds.extents;
         switch (m_orientation)
         {
@@ -55,31 +58,55 @@ public class SnapToCollider : MonoBehaviour
         }
 
     }
+
     void OnMouseEnter()
     {
-
-        if (AddObjectToScene.instance.m_newObject != null && !AddObjectToScene.instance.m_waitingToConfirm)
+        if (AddObjectToScene.instance.m_livePrefab != null && !AddObjectToScene.instance.m_waitingToConfirm)
         {
             AddObjectToScene.instance.m_isAttachedToMouse = false;
-            AddObjectToScene.instance.m_newObject.transform.position = transform.position + m_orientationOffset;
-            AddObjectToScene.instance.m_newObject.transform.rotation = this.transform.rotation;
-            m_mr.material.color = Color.red;
+            AddObjectToScene.instance.m_livePrefab.transform.position = transform.position + m_orientationOffset;
+            AddObjectToScene.instance.m_livePrefab.transform.rotation = this.transform.rotation;
         }
     }
 
     void OnMouseExit()
     {
-        m_mr.material.color = m_paintColor;
+        if (!m_isTriggered)
+            m_mr.material.color = m_originalSurfaceColor;
     }
 
     void OnMouseDown()
     {
         //If we are waiting for a confirmation, or do not have an object, do nothing.
-        if (AddObjectToScene.instance.m_waitingToConfirm || AddObjectToScene.instance.m_newObject == null)
+        if (AddObjectToScene.instance.m_waitingToConfirm || AddObjectToScene.instance.m_livePrefab == null)
             return;
 
         AddObjectToScene.instance.SetObjectAndActivateUI(m_collider, m_rotationAxis);
-        m_mr.material.color = m_paintColor;
-        m_collider.enabled = false;
+
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (!m_isTriggered)
+        {
+            m_mr.material.color = m_isTriggeredColor;
+            m_isTriggered = true;
+            //Debug.Log("Sent msg to " + other.name + " at " + Time.time);
+            other.SendMessage("AddThisCollider", m_collider);
+        }
+        //Debug.Log("entered " + other.name + " at " + Time.time);
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        m_mr.material.color = m_originalSurfaceColor;
+        other.SendMessage("RemoveThisCollider", m_collider);
+        m_isTriggered = false;
+        //Debug.Log("exited " + other.name + Time.time);
+    }
+
+    void ResetColor()
+    {
+        m_mr.material.color = m_originalSurfaceColor;
     }
 }

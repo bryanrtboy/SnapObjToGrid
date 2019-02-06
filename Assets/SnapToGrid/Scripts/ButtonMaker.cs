@@ -37,7 +37,7 @@ public class ButtonMaker : MonoBehaviour
             if (i == null)
                 i = go.AddComponent(typeof(Item)) as Item;
 
-            Texture t = RuntimePreviewGenerator.GenerateModelPreview(go.transform, 60, 60);
+            Texture t = RuntimePreviewGenerator.GenerateModelPreview(go.transform, 256, 256);
 
             //Set the image to use for a thumbnail on the button if it does not already exist
             if (i.thumbnail == null && t != null)

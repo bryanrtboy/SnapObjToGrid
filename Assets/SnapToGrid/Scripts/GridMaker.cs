@@ -40,7 +40,8 @@ public class GridMaker : MonoBehaviour
         m_bounds.transform.localEulerAngles = Vector3.zero;
         //Get the size of the bounding box
         Vector3 max = m_bounds.bounds.size;
-        Vector3 pos = new Vector3(-max.x * .5f, -max.y * .5f, -max.z * .5f);
+        //get the center position
+        Vector3 centerposition = new Vector3(-max.x * .5f, -max.y * .5f, -max.z * .5f);
 
         //Figure out the spacing based on the bounding area
         float x_increment = max.x / m_matrix.x;
@@ -49,7 +50,8 @@ public class GridMaker : MonoBehaviour
 
         GameObject gridContainer = new GameObject(this.name + "_container");
         //create a temporary object based on the prefab, we'll destroy this later
-        GameObject tempObj = Instantiate(m_prefab);
+        //GameObject tempObj = Instantiate(m_prefab);
+        Vector3 scale = Vector3.one;
 
         if (m_scalePrefabToFitBounds)
         {
@@ -66,22 +68,23 @@ public class GridMaker : MonoBehaviour
             if (z > m_spacing)
                 z = z - m_spacing;
 
-            tempObj.transform.localScale = new Vector3(x, y, z);
+            //tempObj.transform.localScale = new Vector3(x, y, z);
+            scale = new Vector3(x, y, z);
         }
 
-        //offset based on the pefab's size
-        Renderer r = tempObj.GetComponent<Renderer>() as Renderer;
-        Vector3 offset = Vector3.zero;
-        if (r != null)
-        {
-            offset = r.bounds.size - (tempObj.transform.localScale * 0.5f);
+        // //offset based on the pefab's size
+        // Renderer r = m_prefab.GetComponent<Renderer>() as Renderer;
+        // Vector3 offset = Vector3.zero;
+        // if (r != null)
+        // {
+        //     //offset = r.bounds.size - (tempObj.transform.localScale * 0.5f);
+        //     offset = r.bounds.size - (scale * 0.5f);
 
-            if (m_scalePrefabToFitBounds)
-                pos = pos + offset;
-            else
-                pos = pos + r.bounds.size;
-
-        }
+        //     if (m_scalePrefabToFitBounds)
+        //         centerposition = centerposition + offset;
+        //     else
+        //         centerposition = centerposition + r.bounds.size;
+        // }
 
 
         //Make the grid
@@ -91,8 +94,13 @@ public class GridMaker : MonoBehaviour
             {
                 for (int y = 0; y < m_matrix.y; y++)
                 {
-                    Vector3 p = new Vector3(x_increment * x, y_increment * y, z_increment * z) + pos;
-                    Instantiate(tempObj, p, Quaternion.identity, gridContainer.transform);
+                    Vector3 p = new Vector3(x_increment * x, y_increment * y, z_increment * z) + centerposition;
+                    GameObject go = Instantiate(m_prefab, p, Quaternion.identity, gridContainer.transform);
+                    go.transform.localScale = scale;
+                    go.name = m_prefab.name + "_" + x.ToString() + y.ToString() + z.ToString();
+
+                    Renderer r = go.GetComponent<Renderer>() as Renderer;
+                    go.transform.localPosition += r.bounds.extents;
                 }
             }
         }
@@ -112,7 +120,7 @@ public class GridMaker : MonoBehaviour
         {
             m_bounds.transform.parent = boundingParent;
         }
-        Destroy(tempObj);
+        //Destroy(tempObj);
 
     }
 }
