@@ -67,6 +67,7 @@ public class SnapToCollider : MonoBehaviour
             AddObjectToScene.instance.m_livePrefab.transform.position = transform.position + m_orientationOffset;
             AddObjectToScene.instance.m_livePrefab.transform.rotation = this.transform.rotation;
         }
+
     }
 
     void OnMouseExit()

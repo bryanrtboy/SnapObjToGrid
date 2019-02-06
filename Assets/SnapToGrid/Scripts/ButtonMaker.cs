@@ -45,6 +45,17 @@ public class ButtonMaker : MonoBehaviour
             string str = g.name.Replace("(Clone)", "");
             i.itemname = str;
             i.prefab = go;
+
+            Bounds bounds = new Bounds(go.transform.position, Vector3.one);
+            Renderer[] renderers = go.GetComponentsInChildren<Renderer>();
+            foreach (Renderer renderer in renderers)
+            {
+                //Debug.Log("growing...");
+                bounds.Encapsulate(renderer.bounds);
+            }
+            //Debug.Log("Size is " + bounds.size);
+            i.m_size = bounds.size;
+
             go.SetActive(false);
             buttons.Add(i);
         }

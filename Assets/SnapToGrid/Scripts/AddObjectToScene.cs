@@ -7,12 +7,15 @@ public class AddObjectToScene : MonoBehaviour
 {
     public static AddObjectToScene instance;
     public Camera m_mainCamera;
-
     public GameObject m_confirmCancelCanvas;
     public GameObject m_rotateTrashCanvas;
-
+    public GameObject m_selectionIndicator;
     public AudioSource m_selectSound;
     public AudioSource m_placeSound;
+    public bool m_moveUIToObject = true;
+
+
+    //Hide these
     [HideInInspector]
     public bool m_isAttachedToMouse = false;
     [HideInInspector]
@@ -33,18 +36,31 @@ public class AddObjectToScene : MonoBehaviour
             Destroy(gameObject);
 
         if (m_confirmCancelCanvas != null)
-            m_confirmCancelCanvas.gameObject.SetActive(false);
+            m_confirmCancelCanvas.SetActive(false);
 
         if (m_rotateTrashCanvas != null)
-            m_rotateTrashCanvas.gameObject.SetActive(false);
+            m_rotateTrashCanvas.SetActive(false);
+
+        if (m_selectionIndicator != null)
+            m_selectionIndicator.SetActive(false);
     }
 
     void Update()
     {
         if (m_isAttachedToMouse)
         {
+            m_selectedItem = null;
             Vector3 pos = m_mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -m_mainCamera.transform.position.z));
             m_livePrefab.transform.position = pos;
+        }
+
+        if (m_selectedItem != null && m_selectionIndicator != null)
+        {
+            if (!m_selectionIndicator.activeSelf)
+            {
+                m_selectionIndicator.SetActive(true);
+            }
+            m_selectionIndicator.transform.position = m_selectedItem.transform.position;
         }
     }
 
@@ -91,7 +107,8 @@ public class AddObjectToScene : MonoBehaviour
         if (m_placeSound != null)
             m_placeSound.Play();
 
-        m_confirmCancelCanvas.transform.position = m_livePrefab.transform.position;
+        if (m_moveUIToObject)
+            m_confirmCancelCanvas.transform.position = m_livePrefab.transform.position;
         m_confirmCancelCanvas.gameObject.SetActive(true);
 
         m_isAttachedToMouse = false;
@@ -133,18 +150,9 @@ public class AddObjectToScene : MonoBehaviour
     {
 
         m_selectedItem = g.GetComponent<Item>() as Item;
-        m_rotateTrashCanvas.transform.position = g.transform.position;
+        if (m_moveUIToObject)
+            m_rotateTrashCanvas.transform.position = g.transform.position;
         m_rotateTrashCanvas.gameObject.SetActive(true);
-    }
-
-    public void RotateObject()
-    {
-        if (m_selectedItem != null)
-        {
-            m_rotationAxis = m_selectedItem.m_rotationAxis;
-            m_selectedItem.transform.Rotate(m_rotationAxis, 45f);
-            m_selectedItem.ActivateAttachedColliders(true);
-        }
     }
 
     public void DestroyActiveObject()
@@ -179,6 +187,9 @@ public class AddObjectToScene : MonoBehaviour
             m_rotateTrashCanvas.gameObject.SetActive(false);
         if (m_confirmCancelCanvas != null)
             m_confirmCancelCanvas.gameObject.SetActive(false);
+
+        if (m_selectionIndicator != null)
+            m_selectionIndicator.SetActive(false);
     }
 
 

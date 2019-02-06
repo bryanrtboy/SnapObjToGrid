@@ -9,6 +9,7 @@ public class Item : MonoBehaviour
     public Texture thumbnail;
     public GameObject prefab;
     public Vector3 m_rotationAxis = Vector3.up;
+    public Vector3 m_size = Vector3.one;
 
     public List<Collider> m_attachedColliders;
 
@@ -25,6 +26,7 @@ public class Item : MonoBehaviour
             return;
 
         AddObjectToScene.instance.SetSelectedObject(this.gameObject);
+        AddObjectToScene.instance.m_isAttachedToMouse = false;
         //make all of these colliders active again, clearing the list
         ActivateAttachedColliders(true);
 

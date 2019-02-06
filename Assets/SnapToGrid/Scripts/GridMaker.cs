@@ -72,21 +72,6 @@ public class GridMaker : MonoBehaviour
             scale = new Vector3(x, y, z);
         }
 
-        // //offset based on the pefab's size
-        // Renderer r = m_prefab.GetComponent<Renderer>() as Renderer;
-        // Vector3 offset = Vector3.zero;
-        // if (r != null)
-        // {
-        //     //offset = r.bounds.size - (tempObj.transform.localScale * 0.5f);
-        //     offset = r.bounds.size - (scale * 0.5f);
-
-        //     if (m_scalePrefabToFitBounds)
-        //         centerposition = centerposition + offset;
-        //     else
-        //         centerposition = centerposition + r.bounds.size;
-        // }
-
-
         //Make the grid
         for (int z = 0; z < m_matrix.z; z++)
         {
