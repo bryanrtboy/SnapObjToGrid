@@ -8,6 +8,7 @@ public class SnapToCollider : MonoBehaviour
     public enum Orientation { Xnegative, Xpositive, Ynegative, Ypositive, Znegative, Zpositive };
     [Tooltip("The surface plane that we will snap the object to")]
     public Orientation m_orientation = Orientation.Ypositive;
+    public bool m_changeTileIndicator = true;
     public Color m_isTriggeredColor = Color.yellow;
 
     Color m_originalSurfaceColor = Color.white;
@@ -72,7 +73,7 @@ public class SnapToCollider : MonoBehaviour
 
     void OnMouseExit()
     {
-        if (!m_isTriggered)
+        if (m_changeTileIndicator && !m_isTriggered)
             m_mr.material.color = m_originalSurfaceColor;
     }
 
@@ -90,7 +91,8 @@ public class SnapToCollider : MonoBehaviour
     {
         if (!m_isTriggered)
         {
-            m_mr.material.color = m_isTriggeredColor;
+            if (m_changeTileIndicator)
+                m_mr.material.color = m_isTriggeredColor;
             m_isTriggered = true;
             //Debug.Log("Sent msg to " + other.name + " at " + Time.time);
             other.SendMessage("AddThisCollider", m_collider);
@@ -100,7 +102,8 @@ public class SnapToCollider : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        m_mr.material.color = m_originalSurfaceColor;
+        if (m_changeTileIndicator)
+            m_mr.material.color = m_originalSurfaceColor;
         other.SendMessage("RemoveThisCollider", m_collider);
         m_isTriggered = false;
         //Debug.Log("exited " + other.name + Time.time);
@@ -108,6 +111,7 @@ public class SnapToCollider : MonoBehaviour
 
     void ResetColor()
     {
-        m_mr.material.color = m_originalSurfaceColor;
+        if (m_changeTileIndicator)
+            m_mr.material.color = m_originalSurfaceColor;
     }
 }

@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_orientation: 3
-  m_mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
+  m_changeTileIndicator: 0
   m_isTriggeredColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!54 &3009724686929050737
 Rigidbody:
