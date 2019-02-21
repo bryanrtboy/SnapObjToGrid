@@ -108,7 +108,9 @@ public class AddObjectToScene : MonoBehaviour
             m_placeSound.Play();
 
         if (m_moveUIToObject)
+        {
             m_confirmCancelCanvas.transform.position = m_livePrefab.transform.position;
+        }
         m_confirmCancelCanvas.gameObject.SetActive(true);
 
         m_isAttachedToMouse = false;
