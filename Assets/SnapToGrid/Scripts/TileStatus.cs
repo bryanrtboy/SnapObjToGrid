@@ -22,6 +22,7 @@ public class TileStatus : MonoBehaviour
     void Awake()
     {
         m_mr = this.GetComponent<MeshRenderer>();
+        m_originalSurfaceColor = m_mr.material.color;
     }
 
     void OnTriggerEnter(Collider other)
