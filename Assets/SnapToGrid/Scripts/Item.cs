@@ -22,7 +22,7 @@ public class Item : MonoBehaviour
     void OnMouseDown()
     {
         //Don't select objects while we are placing an object
-        if (AddObjectToScene.instance.m_livePrefab != null)
+        if (AddObjectToScene.instance == null || AddObjectToScene.instance.m_livePrefab != null)
             return;
 
         AddObjectToScene.instance.SetSelectedObject(this.gameObject);

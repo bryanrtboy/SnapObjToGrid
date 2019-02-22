@@ -2898,7 +2898,7 @@ MonoBehaviour:
     type: 3}
   m_contentContainer: {fileID: 894583239}
   buttons: []
-  m_path: FloorObjects
+  m_path: SnapObjects
 --- !u!114 &1800371178
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -16,6 +16,7 @@ public class ButtonMaker : MonoBehaviour
     public Transform m_contentContainer;
     public List<Item> buttons;
     public string m_path = "FloorObjects";
+    public bool m_makeSnapButtons = true;
 
     private void Start()
     {
@@ -80,7 +81,15 @@ public class ButtonMaker : MonoBehaviour
                 tmp.text = b.itemname;
             }
 
-            but.onClick.AddListener(() => { AddObjectToScene.instance.PlaceObject(b.prefab); });
+            if (m_makeSnapButtons)
+            {
+
+                but.onClick.AddListener(() => { AddObjectToScene.instance.PlaceObject(b.prefab); });
+            }
+            else
+            {
+                but.onClick.AddListener(() => { DropSlideObjectsIntoScene.instance.PlaceObject(b.prefab); });
+            }
         }
     }
 
