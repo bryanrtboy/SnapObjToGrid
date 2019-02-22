@@ -16,7 +16,7 @@ public class DropSlideObjectsIntoScene : MonoBehaviour
     public Slider m_RotationSlider;
     public float m_fadeHUDDelay = 2f;
 
-    GameObject m_selectedObject;
+    public GameObject m_selectedObject;
     TileStatus[] m_floorTiles;
 
     bool m_canPlace = false;
@@ -134,9 +134,16 @@ public class DropSlideObjectsIntoScene : MonoBehaviour
         if (m_selectedObject != null)
         {
             GameObject temp = m_selectedObject;
+            temp.transform.Translate(Vector3.forward * 10000f);
             m_selectedObject = null;
-            Destroy(temp);
+            DestroyAfterMovingAway(temp);
         }
+    }
+
+    IEnumerator DestroyAfterMovingAway(GameObject g)
+    {
+        yield return new WaitForEndOfFrame();
+        ; Destroy(g);
     }
 
     public void ShowHUDCanvas(bool isVisible)
@@ -176,6 +183,7 @@ public class DropSlideObjectsIntoScene : MonoBehaviour
         }
 
         m_canPlace = true;
+        m_selectedObject = go;
     }
 
 }

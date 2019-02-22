@@ -7,6 +7,7 @@ public class ObjectSlider : MonoBehaviour
     public float fixedYDistance = 2.0f;
     public Vector2 m_minXZ;
     public string m_otherTag = "Furniture";
+    public float m_ZfudgeFactor = 0f;
 
     Plane movePlane;
     float hitDist, t;
@@ -58,8 +59,8 @@ public class ObjectSlider : MonoBehaviour
 
                 if (z > m_minXZ.y)
                     z = m_minXZ.y;
-                else if (z < -m_minXZ.y)
-                    z = -m_minXZ.y;
+                else if (z < -(m_minXZ.y - m_ZfudgeFactor))
+                    z = -(m_minXZ.y - m_ZfudgeFactor);
 
                 transform.position = new Vector3(x, y, z);
             }
