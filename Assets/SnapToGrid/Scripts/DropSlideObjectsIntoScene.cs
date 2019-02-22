@@ -136,14 +136,14 @@ public class DropSlideObjectsIntoScene : MonoBehaviour
             GameObject temp = m_selectedObject;
             temp.transform.Translate(Vector3.forward * 10000f);
             m_selectedObject = null;
-            DestroyAfterMovingAway(temp);
+            StartCoroutine(DestroyAfterMovingAway(temp));
         }
     }
 
     IEnumerator DestroyAfterMovingAway(GameObject g)
     {
         yield return new WaitForEndOfFrame();
-        ; Destroy(g);
+        Destroy(g);
     }
 
     public void ShowHUDCanvas(bool isVisible)
