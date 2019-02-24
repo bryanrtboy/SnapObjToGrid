@@ -15,14 +15,13 @@ public class ButtonMaker : MonoBehaviour
     public GameObject m_buttonPrefab;
     public Transform m_contentContainer;
     public List<Item> buttons;
-    public string m_path = "FloorObjects";
-    public bool m_makeSnapButtons = true;
+    public string m_path = "Objects";
+    public DropToTiles m_dropScript;
 
     private void Start()
     {
         buttons = new List<Item>();
         GetButtonAtPath(m_path, 1, 1, false);
-
         MakeButtons();
     }
     void GetButtonAtPath(string s, int w, int h, bool isTopper)
@@ -31,32 +30,26 @@ public class ButtonMaker : MonoBehaviour
         prefabs = Resources.LoadAll<GameObject>(s + "/");
         foreach (GameObject g in prefabs)
         {
+            //Make a template object
             GameObject go = Instantiate(g, Vector3.zero, Quaternion.identity);
 
-
+            //Create the item properties if it does not exist on the prefab
             Item i = go.GetComponent<Item>();
             if (i == null)
                 i = go.AddComponent(typeof(Item)) as Item;
 
-            Texture t = RuntimePreviewGenerator.GenerateModelPreview(go.transform, 256, 256);
 
-            //Set the image to use for a thumbnail on the button if it does not already exist
-            if (i.thumbnail == null && t != null)
+            //If the prefab had an item, check for a thumbnail to use
+            if (i.thumbnail == null)
+            {
+                //Build the thumbnail for the button
+                Texture t = RuntimePreviewGenerator.GenerateModelPreview(go.transform, 256, 256);
                 i.thumbnail = t;
+            }
+            //Rename the cloned prefab
             string str = g.name.Replace("(Clone)", "");
             i.itemname = str;
             i.prefab = go;
-
-            Bounds bounds = new Bounds(go.transform.position, Vector3.one);
-            Renderer[] renderers = go.GetComponentsInChildren<Renderer>();
-            foreach (Renderer renderer in renderers)
-            {
-                //Debug.Log("growing...");
-                bounds.Encapsulate(renderer.bounds);
-            }
-            //Debug.Log("Size is " + bounds.size);
-            i.m_size = bounds.size;
-
             go.SetActive(false);
             buttons.Add(i);
         }
@@ -81,15 +74,8 @@ public class ButtonMaker : MonoBehaviour
                 tmp.text = b.itemname;
             }
 
-            if (m_makeSnapButtons)
-            {
+            but.onClick.AddListener(() => { m_dropScript.PlaceObject(b.prefab); });
 
-                but.onClick.AddListener(() => { AddObjectToScene.instance.PlaceObject(b.prefab); });
-            }
-            else
-            {
-                but.onClick.AddListener(() => { DropSlideObjectsIntoScene.instance.PlaceObject(b.prefab); });
-            }
         }
     }
 
