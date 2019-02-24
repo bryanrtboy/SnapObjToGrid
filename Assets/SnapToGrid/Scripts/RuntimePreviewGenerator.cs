@@ -169,7 +169,7 @@ public static class RuntimePreviewGenerator
     static RuntimePreviewGenerator()
     {
         PreviewRenderCamera = null;
-        PreviewDirection = new Vector3(-1f, 1f, -1f);
+        PreviewDirection = new Vector3(0f, 0f, -1f);
         Padding = 0f;
         BackgroundColor = new Color(0.3f, 0.3f, 0.3f, 1f);
         OrthographicMode = true;
