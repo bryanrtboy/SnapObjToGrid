@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Item : MonoBehaviour
 {
     public string itemname;
-    public Texture thumbnail;
+    public Texture2D thumbnail;
     public GameObject prefab;
 
 }

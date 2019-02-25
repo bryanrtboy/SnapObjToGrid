@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 public class ButtonMaker : MonoBehaviour
 {
@@ -21,10 +22,10 @@ public class ButtonMaker : MonoBehaviour
     private void Start()
     {
         buttons = new List<Item>();
-        GetButtonAtPath(m_path, 1, 1, false);
+        GetButtonAtPath(m_path);
         MakeButtons();
     }
-    void GetButtonAtPath(string s, int w, int h, bool isTopper)
+    void GetButtonAtPath(string s)
     {
         GameObject[] prefabs;
         prefabs = Resources.LoadAll<GameObject>(s + "/");
@@ -43,7 +44,7 @@ public class ButtonMaker : MonoBehaviour
             if (i.thumbnail == null)
             {
                 //Build the thumbnail for the button
-                Texture t = RuntimePreviewGenerator.GenerateModelPreview(go.transform, 256, 256);
+                Texture2D t = RuntimePreviewGenerator.GenerateModelPreview(go.transform, 256, 256);
                 i.thumbnail = t;
             }
             //Rename the cloned prefab
@@ -52,6 +53,8 @@ public class ButtonMaker : MonoBehaviour
             i.prefab = go;
             go.SetActive(false);
             buttons.Add(i);
+
+
         }
 
     }

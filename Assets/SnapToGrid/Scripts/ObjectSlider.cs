@@ -22,11 +22,11 @@ public class ObjectSlider : MonoBehaviour
 
     void OnMouseDown()
     {
-        ObjectControls.instance.SetSelectedObject(this.gameObject);
-        ObjectControls.instance.m_RotationSlider.gameObject.SetActive(false);
-        ObjectControls.instance.m_HUDCanvas.transform.position = transform.position;
+        if (ObjectControls.instance.m_selectedObject != this.gameObject)
+            ObjectControls.instance.SetSelectedObject(this.gameObject);
 
         m_isDragging = true; //We are in the dragging state
+
         if (m_snapToCenter && m_tileLayer.value == 0)
             Debug.LogWarning("Tile layer is not set!");
 
@@ -35,8 +35,6 @@ public class ObjectSlider : MonoBehaviour
         if (!m_snapToCenter)
             m_movePlane = new Plane(-Camera.main.transform.forward, transform.position); // find a parallel plane to the camera based on obj start pos;
 
-
-        ObjectControls.instance.ShowHUDCanvas(true);
     }
 
     void OnMouseUp()
@@ -53,7 +51,7 @@ public class ObjectSlider : MonoBehaviour
 
         if (ObjectControls.instance != null)
         {
-            ObjectControls.instance.m_HUDCanvas.transform.position = transform.position;
+            //ObjectControls.instance.m_HUDCanvas.transform.position = transform.position;
             ObjectControls.instance.ResetLastActiveTime();
         }
     }
@@ -105,7 +103,7 @@ public class ObjectSlider : MonoBehaviour
     {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, 20f, m_tileLayer))
+        if (Physics.Raycast(ray, out hit, 100f, m_tileLayer))
         {
             TileStatus t = hit.transform.GetComponent<TileStatus>();
             if (!t.m_isOccupied)

@@ -169,7 +169,8 @@ public static class RuntimePreviewGenerator
     static RuntimePreviewGenerator()
     {
         PreviewRenderCamera = null;
-        PreviewDirection = new Vector3(0f, 0f, -1f);
+        PreviewDirection = new Vector3(0f, 1f, 0f);
+        //PreviewDirection = new Vector3(.25f, .25f, 1f);
         Padding = 0f;
         BackgroundColor = new Color(0.3f, 0.3f, 0.3f, 1f);
         OrthographicMode = true;
@@ -370,7 +371,7 @@ public static class RuntimePreviewGenerator
 
             result = new Texture2D(width, height, m_transparentBackground ? TextureFormat.RGBA32 : TextureFormat.RGB24, false);
             result.ReadPixels(new Rect(0, 0, width, height), 0, 0, false);
-            result.Apply(false, true);
+            result.Apply(false, false);
 
             RenderTexture.active = temp;
             RenderTexture.ReleaseTemporary(renderTex);

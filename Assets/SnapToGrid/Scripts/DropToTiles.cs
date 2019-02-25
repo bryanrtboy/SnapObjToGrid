@@ -21,6 +21,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class DropToTiles : MonoBehaviour
 {
@@ -95,7 +96,7 @@ public class DropToTiles : MonoBehaviour
             o.tag = m_objectTag;
             o.m_fixedYDistance = t.transform.position.y;
             o.m_minXYZ = m_floorBounds;
-            o.m_ZfudgeFactor = 2f;
+            o.m_ZfudgeFactor = 5f;
             o.m_snapToCenter = m_snapToCenter;
             o.m_tilesTag = m_tilesTag;
             o.m_tileLayer = m_tileLayer;
@@ -119,7 +120,7 @@ public class DropToTiles : MonoBehaviour
         }
         m_canPlace = true;
         //Debug.Log("Now you can place another." + Time.time);
-        ObjectControls.instance.m_selectedObject = go;
+        ObjectControls.instance.SetSelectedObject(go);
 
         if (o != null)
         {

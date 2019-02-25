@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 public class ObjectControls : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class ObjectControls : MonoBehaviour
     public AudioSource m_selectSound;
     public CanvasGroup m_HUDCanvas;
     public Slider m_RotationSlider;
-    public float m_fadeHUDDelay = 2f;
+    public float m_fadeHUDDelay = 5f;
+    public string m_saveThumbnailPath = "/../";
 
 
     public GameObject m_selectedObject;
@@ -53,6 +55,9 @@ public class ObjectControls : MonoBehaviour
             }
         }
 
+        if (m_selectedObject != null)
+            m_HUDCanvas.gameObject.transform.position = m_selectedObject.transform.position;
+
     }
 
     public void SetSelectedObject(GameObject g)
@@ -60,17 +65,21 @@ public class ObjectControls : MonoBehaviour
         m_selectedObject = g;
         m_lastActiveTime = Time.time;
         m_RotationSlider.value = g.transform.localEulerAngles.y;
+        ShowHUDCanvas(true);
     }
 
     public void DeselectObject()
     {
+        ShowHUDCanvas(false);
         m_selectedObject = null;
+
     }
 
     public void DestroySelected()
     {
         if (m_selectedObject != null)
         {
+            ShowHUDCanvas(false);
             GameObject temp = m_selectedObject;
             temp.transform.Translate(Vector3.forward * 10000f);
             m_selectedObject = null;
@@ -90,6 +99,7 @@ public class ObjectControls : MonoBehaviour
         {
             ResetLastActiveTime();
             m_HUDCanvas.gameObject.SetActive(isVisible);
+            m_HUDCanvas.alpha = 1f;
         }
         else
         {
@@ -112,6 +122,28 @@ public class ObjectControls : MonoBehaviour
         if (m_selectedObject != null)
             m_selectedObject.transform.localEulerAngles = new Vector3(0f, angle, 0f);
 
+    }
+
+
+    public void SaveIconToDisk()
+    {
+        if (m_selectedObject == null)
+            return;
+
+        Item i = m_selectedObject.GetComponent<Item>();
+
+        if (i == null)
+            return;
+
+        Texture2D tex = new Texture2D(i.thumbnail.width, i.thumbnail.height);
+
+        tex.SetPixels32(i.thumbnail.GetPixels32());
+        tex.Apply(false, false);
+        byte[] bytes = tex.EncodeToPNG();
+        Object.Destroy(tex);
+        // For testing purposes, also write to a file in the project folder
+        File.WriteAllBytes(Application.dataPath + m_saveThumbnailPath + i.itemname + ".png", bytes);
+        Debug.Log("Made a thumbnail for " + i.itemname);
     }
 
 }
