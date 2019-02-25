@@ -78,6 +78,7 @@ public class ObjectSlider : MonoBehaviour
         if (m_movePlane.Raycast(m_camRay, out m_hitDist))
         { // finde the collision on movePlane
             m_point = m_camRay.GetPoint(m_hitDist); // define the point on movePlane
+            Debug.DrawRay(m_point, m_camRay.direction * 10f, Color.red, .1f);
             m_t = -(m_fixedYDistance - m_camRay.origin.y) / (m_camRay.origin.y - m_point.y); // the x,y or z plane you want to be fixed to
 
             float x = m_camRay.origin.x + (m_point.x - m_camRay.origin.x) * m_t; // calculate the new point t futher along the ray

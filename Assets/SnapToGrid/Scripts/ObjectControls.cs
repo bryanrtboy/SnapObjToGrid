@@ -70,7 +70,7 @@ public class ObjectControls : MonoBehaviour
 
     public void DeselectObject()
     {
-        ShowHUDCanvas(false);
+        m_HUDCanvas.gameObject.SetActive(false);
         m_selectedObject = null;
 
     }

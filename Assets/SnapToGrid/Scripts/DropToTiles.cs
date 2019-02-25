@@ -89,6 +89,7 @@ public class DropToTiles : MonoBehaviour
         {
             TileStatus t = availableTiles[Random.Range(0, availableTiles.Count - 1)];
             m_canPlace = false;
+            ObjectControls.instance.DeselectObject();
 
             GameObject go = Instantiate(g, m_spawnPoint, t.transform.rotation, t.transform.parent);
             o = go.AddComponent<ObjectSlider>();
