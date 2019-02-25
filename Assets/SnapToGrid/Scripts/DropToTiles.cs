@@ -113,7 +113,7 @@ public class DropToTiles : MonoBehaviour
 
     IEnumerator FallToTile(TileStatus tile, GameObject go)
     {
-        while (Mathf.Abs(go.transform.position.y - tile.transform.position.y) > .01f)
+        while (Vector3.Distance(tile.transform.position, go.transform.position) > .1f)
         {
             go.transform.position = Vector3.Lerp(go.transform.position, tile.transform.position, Time.deltaTime * 10f);
             yield return null;
