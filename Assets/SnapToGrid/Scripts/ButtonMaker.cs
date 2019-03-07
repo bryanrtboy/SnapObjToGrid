@@ -15,9 +15,12 @@ public class ButtonMaker : MonoBehaviour
 {
     public GameObject m_buttonPrefab;
     public Transform m_contentContainer;
-    public List<Item> buttons;
+    public int m_iconSize = 64;
     public string m_path = "Objects";
     public DropToTiles m_dropScript;
+
+    [HideInInspector]
+    public List<Item> buttons;
 
     private void Start()
     {
@@ -44,7 +47,7 @@ public class ButtonMaker : MonoBehaviour
             if (i.thumbnail == null)
             {
                 //Build the thumbnail for the button
-                Texture2D t = RuntimePreviewGenerator.GenerateModelPreview(go.transform, 256, 256);
+                Texture2D t = RuntimePreviewGenerator.GenerateModelPreview(go.transform, m_iconSize, m_iconSize);
                 i.thumbnail = t;
             }
             //Rename the cloned prefab
